@@ -1,0 +1,22 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new beta build to Firebase App Distribution"
+  lane :distribute do
+    # 1. Increment build number (If using Xcode project)
+    # increment_build_number(xcodeproj: "ClipVault.xcodeproj")
+    
+    # 2. Build the app
+    build_app(
+      scheme: "ClipVault",
+      export_method: "ad-hoc"
+    )
+    
+    # 3. Upload to Firebase
+    firebase_app_distribution(
+      app: "1:308918855653:ios:b74700830b24e6d5ec710c",
+      groups: "testers",
+      release_notes: "Initial Firebase connected build for testing logic."
+    )
+  end
+end
