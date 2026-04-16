@@ -3,7 +3,7 @@ import SwiftUI
 struct OnboardingSlide {
     let title: String
     let description: String
-    let icon: String
+    let imageName: String
 }
 
 struct OnboardingView: View {
@@ -12,9 +12,9 @@ struct OnboardingView: View {
     @State private var showLegalConsent = false
     
     let slides = [
-        OnboardingSlide(title: "Save any content you own", description: "Download videos, photos, reels, and stories directly to your device.", icon: "arrow.down.circle.fill"),
-        OnboardingSlide(title: "Organize your media in one place", description: "Keep your saved content tidy with our built-in library viewer.", icon: "square.grid.2x2.fill"),
-        OnboardingSlide(title: "Access it offline, anytime", description: "No internet? No problem. All your saved media is stored locally.", icon: "wifi.slash")
+        OnboardingSlide(title: "Save any content you own", description: "Download videos, photos, reels, and stories directly to your device with one click.", imageName: "Onboarding1"),
+        OnboardingSlide(title: "Organize your media in one place", description: "Keep your saved content tidy with our built-in high-fidelity library viewer.", imageName: "Onboarding2"),
+        OnboardingSlide(title: "Access it offline, anytime", description: "No internet? No problem. All your saved media is stored securely on device.", imageName: "Onboarding3")
     ]
     
     var body: some View {
@@ -23,44 +23,46 @@ struct OnboardingView: View {
             
             // Dynamic Background Glow
             Circle()
-                .fill(currentIndex == 0 ? Color.blue : (currentIndex == 1 ? Color.purple : Color.orange))
-                .frame(width: 400)
-                .blur(radius: 120)
-                .opacity(0.15)
-                .offset(x: -100, y: -200)
-                .animation(.easeInOut(duration: 1.0), value: currentIndex)
+                .fill(currentIndex == 0 ? Theme.primary : (currentIndex == 1 ? Color.purple : Color.blue))
+                .frame(width: 450)
+                .blur(radius: 140)
+                .opacity(0.18)
+                .offset(x: -120, y: -250)
+                .animation(.easeInOut(duration: 1.2), value: currentIndex)
             
             VStack {
                 TabView(selection: $currentIndex) {
                     ForEach(0..<slides.count, id: \.self) { index in
-                        VStack(spacing: 30) {
+                        VStack(spacing: 40) {
                             Spacer()
                             
                             ZStack {
                                 Circle()
-                                    .fill(Theme.primary.opacity(0.1))
-                                    .frame(width: 200, height: 200)
-                                    .blur(radius: 20)
+                                    .fill(Theme.primary.opacity(0.15))
+                                    .frame(width: 280, height: 280)
+                                    .blur(radius: 40)
                                 
-                                Image(systemName: slides[index].icon)
+                                Image(slides[index].imageName)
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 100, height: 100)
-                                    .foregroundStyle(Theme.primaryGradient)
+                                    .frame(width: 240, height: 240)
+                                    .clipShape(RoundedRectangle(cornerRadius: 30))
+                                    .shadow(color: Theme.primary.opacity(0.5), radius: 30, x: 0, y: 15)
                             }
                             
-                            VStack(spacing: 12) {
+                            VStack(spacing: 16) {
                                 Text(slides[index].title)
-                                    .font(.system(size: 32, weight: .black, design: .rounded))
+                                    .font(.system(size: 34, weight: .black, design: .rounded))
                                     .foregroundColor(Theme.text)
                                     .multilineTextAlignment(.center)
+                                    .padding(.horizontal, 20)
                                 
                                 Text(slides[index].description)
-                                    .font(.system(size: 18))
+                                    .font(.system(size: 19))
                                     .foregroundColor(Theme.secondaryText)
                                     .multilineTextAlignment(.center)
-                                    .padding(.horizontal, 40)
-                                    .lineSpacing(4)
+                                    .padding(.horizontal, 44)
+                                    .lineSpacing(6)
                             }
                             
                             Spacer()

@@ -3,6 +3,7 @@ name: iOS Build & Distribute
 on:
   push:
     branches: [ main, master ]
+  workflow_dispatch: # Enable manual triggering
 
 jobs:
   build:
@@ -10,20 +11,35 @@ jobs:
     runs-on: macos-latest
     
     steps:
-      - name: Checkout
+      - name: Checkout Source
         uses: actions/checkout@v3
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1'
+          bundler-cache: true # automatically runs 'bundle install' and caches installed gems
+
+      - name: Cache Brew Tuist
+        id: cache-tuist
+        uses: actions/cache@v3
+        with:
+          path: /usr/local/bin/tuist
+          key: ${{ runner.os }}-tuist
+
       - name: Install Tuist
+        if: steps.cache-tuist.outputs.cache-hit != 'true'
         run: brew install tuist
 
       - name: Install Fastlane Plugins
         run: bundle exec fastlane install_plugins
 
-      - name: Generate Xcode Project
+      - name: Generate Xcode Project with Tuist
         run: tuist generate --no-open
 
-      - name: Build and Distribute
+      - name: Build and Distribute to Firebase
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          # Ensure you have set up App Store Connect API Key or Session for Match if needed
         run: bundle exec fastlane distribute
