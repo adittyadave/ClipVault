@@ -26,7 +26,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: /usr/local/bin/tuist
-          key: ${{ runner.os }}-tuist
+          key: ${{ runner.os }}-tuist-v4
 
       - name: Install Tuist
         if: steps.cache-tuist.outputs.cache-hit != 'true'
@@ -37,6 +37,7 @@ jobs:
 
       - name: Generate Xcode Project with Tuist
         run: |
+          tuist version
           tuist install
           tuist generate --no-open
 
