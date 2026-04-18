@@ -1,0 +1,11 @@
+git_url("https://github.com/[YOUR_USERNAME]/[YOUR_CERTIFICATES_REPO].git")
+
+storage_mode("git")
+
+type("adhoc") # The default type, can be: appstore, adhoc, enterprise or development
+
+# app_identifier(["com.yourcompany.ClipVault"])
+# username("your-apple-id@email.com")
+
+# For automated builds, you can specify the team_id
+# team_id("YOUR_TEAM_ID")
