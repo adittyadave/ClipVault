@@ -39,7 +39,7 @@ jobs:
         run: |
           tuist version
           tuist install
-          tuist generate --no-open
+          tuist generate --no-open --path .
 
       - name: Build and Distribute to Firebase
         # Ensure you have set up App Store Connect API Key or Session for Match if needed
