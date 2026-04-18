@@ -11,10 +11,6 @@ jobs:
     runs-on: macos-latest
     permissions:
       contents: read
-    env:
-      FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
-      MATCH_PASSWORD: "${{ secrets.MATCH_PASSWORD }}"
-    
     steps:
       - name: Checkout Source
         uses: actions/checkout@v3
@@ -44,4 +40,7 @@ jobs:
 
       - name: Build and Distribute to Firebase
         # Ensure you have set up App Store Connect API Key or Session for Match if needed
+        env:
+          FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
+          MATCH_PASSWORD: "${{ secrets.MATCH_PASSWORD }}"
         run: bundle exec fastlane distribute
