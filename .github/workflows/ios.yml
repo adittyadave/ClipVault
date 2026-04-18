@@ -36,7 +36,9 @@ jobs:
         run: bundle exec fastlane install_plugins
 
       - name: Generate Xcode Project with Tuist
-        run: tuist generate --no-open
+        run: |
+          tuist install
+          tuist generate --no-open
 
       - name: Build and Distribute to Firebase
         # Ensure you have set up App Store Connect API Key or Session for Match if needed

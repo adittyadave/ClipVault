@@ -3,13 +3,17 @@ import ProjectDescription
 let project = Project(
     name: "ClipVault",
     targets: [
-        Target(
+        .target(
             name: "ClipVault",
-            platform: .iOS,
+            destinations: .iOS,
             product: .app,
             bundleId: "com.adii.ClipVault",
-            deploymentTarget: .iOS(targetVersion: "17.0", devices: .iphone),
-            infoPlist: .default,
+            deploymentTargets: .iOS("17.0"),
+            infoPlist: .extendingDefault(with: [
+                "NSPhotoLibraryUsageDescription": "ClipVault needs access to your photos to save videos and reels to your camera roll.",
+                "ITSAppUsesNonExemptEncryption": false,
+                "UILaunchStoryboardName": "LaunchScreen"
+            ]),
             sources: ["App/**", "Views/**", "Models/**", "Services/**", "Utils/**", "Components/**"],
             resources: ["Assets/**"],
             dependencies: [
