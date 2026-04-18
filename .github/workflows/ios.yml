@@ -43,4 +43,6 @@ jobs:
         env:
           FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
           MATCH_PASSWORD: "${{ secrets.MATCH_PASSWORD }}"
+          MATCH_GIT_URL: "${{ secrets.MATCH_GIT_URL }}"
+          FASTLANE_TEAM_ID: "${{ secrets.FASTLANE_TEAM_ID }}"
         run: bundle exec fastlane distribute
