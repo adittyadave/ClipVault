@@ -21,8 +21,10 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
-      - name: Setup Tuist
-        uses: tuist/setup-tuist@v1
+      - name: Install Tuist
+        run: |
+          brew tap tuist/tuist
+          brew install --formula tuist
 
       - name: Install Tuist Dependencies
         run: tuist install
