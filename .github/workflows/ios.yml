@@ -3,12 +3,12 @@ name: iOS Build & Distribute
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch: # Enable manual triggering
+  workflow_dispatch:
 
 jobs:
   build:
     name: Build and Distribute
-    runs-on: macos-latest
+    runs-on: macos-14 # Use the latest macOS with arm64 support
     permissions:
       contents: read
     steps:
@@ -18,34 +18,30 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.1'
-          bundler-cache: true # automatically runs 'bundle install' and caches installed gems
-
-      - name: Cache Brew Tuist
-        id: cache-tuist
-        uses: actions/cache@v3
-        with:
-          path: /usr/local/bin/tuist
-          key: ${{ runner.os }}-tuist-v4
+          ruby-version: '3.2'
+          bundler-cache: true
 
       - name: Install Tuist
-        if: steps.cache-tuist.outputs.cache-hit != 'true'
-        run: brew install tuist
+        run: |
+          curl -Ls https://install.tuist.io | bash
+          # Ensure tuist is in the path
+          echo "/usr/local/bin" >> $GITHUB_PATH
 
       - name: Install Fastlane Plugins
         run: bundle exec fastlane install_plugins
 
       - name: Generate Xcode Project with Tuist
         run: |
-          tuist version
           tuist install
-          tuist generate --no-open --path .
+          tuist generate --no-open
 
       - name: Build and Distribute to Firebase
-        # Ensure you have set up App Store Connect API Key or Session for Match if needed
         env:
           FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
           MATCH_PASSWORD: "${{ secrets.MATCH_PASSWORD }}"
           MATCH_GIT_URL: "${{ secrets.MATCH_GIT_URL }}"
           APPLE_TEAM_ID: "${{ secrets.APPLE_TEAM_ID }}"
+          APP_STORE_CONNECT_API_KEY_KEY_ID: "${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}"
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: "${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}"
+          APP_STORE_CONNECT_API_KEY_KEY: "${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}"
         run: bundle exec fastlane distribute

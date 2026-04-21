@@ -16,6 +16,7 @@ final class SavedMedia {
     var localFilePath: String?
     var thumbnailData: Data?
     var mediaTypeString: String
+    var platform: String
     var dateSaved: Date
     
     var mediaType: MediaType {
@@ -24,21 +25,17 @@ final class SavedMedia {
     }
     
     var platformName: String {
-        let url = originalURL.lowercased()
-        if url.contains("instagram.com") || url.contains("instagr.am") { return "Instagram" }
-        if url.contains("tiktok.com") || url.contains("vm.tiktok") { return "TikTok" }
-        if url.contains("youtube.com") || url.contains("youtu.be") { return "YouTube" }
-        if url.contains("facebook.com") { return "Facebook" }
-        return "ClipVault"
+        platform // Direct access to stored property
     }
     
-    init(id: UUID = UUID(), title: String, originalURL: String, localFilePath: String? = nil, thumbnailData: Data? = nil, mediaType: MediaType, dateSaved: Date = Date()) {
+    init(id: UUID = UUID(), title: String, originalURL: String, localFilePath: String? = nil, thumbnailData: Data? = nil, mediaType: MediaType, platform: String = "Generic", dateSaved: Date = Date()) {
         self.id = id
         self.title = title
         self.originalURL = originalURL
         self.localFilePath = localFilePath
         self.thumbnailData = thumbnailData
         self.mediaTypeString = mediaType.rawValue
+        self.platform = platform
         self.dateSaved = dateSaved
     }
 }
