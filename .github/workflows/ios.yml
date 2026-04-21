@@ -21,27 +21,25 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
-      - name: Install Tuist
-        run: |
-          curl -Ls https://install.tuist.io | bash
-          # Ensure tuist is in the path
-          echo "/usr/local/bin" >> $GITHUB_PATH
+      - name: Setup Tuist
+        uses: tuist/setup-tuist@v1
+
+      - name: Install Tuist Dependencies
+        run: tuist install
+
+      - name: Generate Xcode Project
+        run: tuist generate --no-open
 
       - name: Install Fastlane Plugins
         run: bundle exec fastlane install_plugins
 
-      - name: Generate Xcode Project with Tuist
-        run: |
-          tuist install
-          tuist generate --no-open
-
       - name: Build and Distribute to Firebase
         env:
-          FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}"
-          MATCH_PASSWORD: "${{ secrets.MATCH_PASSWORD }}"
-          MATCH_GIT_URL: "${{ secrets.MATCH_GIT_URL }}"
-          APPLE_TEAM_ID: "${{ secrets.APPLE_TEAM_ID }}"
-          APP_STORE_CONNECT_API_KEY_KEY_ID: "${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}"
-          APP_STORE_CONNECT_API_KEY_ISSUER_ID: "${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}"
-          APP_STORE_CONNECT_API_KEY_KEY: "${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}"
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY_ID }}
+          APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ISSUER_ID }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
         run: bundle exec fastlane distribute
